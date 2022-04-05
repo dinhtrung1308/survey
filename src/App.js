@@ -18,7 +18,7 @@ function App() {
   });
   console.log(window.location.pathname);
   function submit(e) {
-//     e.preventDefault();
+    e.preventDefault();
     Axios.post("https://cors-everywhere.herokuapp.com/http://103.116.105.48:3000/performance/feedback", {
       email: feedbackForm.email,
       overall: feedbackForm.overall,
