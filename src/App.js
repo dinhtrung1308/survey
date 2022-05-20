@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Container, Grid, TextField, Typography, Button } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import logo from "./logo.svg";
+import { ToastContainer, toast } from "react-toastify";
 import "./App.css";
 import Axios from "axios";
+toast.configure();
 
 function App() {
   const [feedbackForm, setFeedbackForm] = useState({
@@ -16,21 +19,43 @@ function App() {
     appetite: 0,
     serviceTime: 0,
   });
-  console.log(window.location.pathname);
+  const id = useParams();
+  console.log(id);
   function submit(e) {
     e.preventDefault();
-    Axios.post("https://cors-everywhere.herokuapp.com/http://103.116.105.48:3000/performance/feedback", {
-      email: feedbackForm.email,
-      overall: feedbackForm.overall,
-      staff: feedbackForm.staff,
-      cleanliness: feedbackForm.cleanliness,
-      facilities: feedbackForm.facilities,
-      valueForMoney: feedbackForm.valueForMoney,
-      appetite: feedbackForm.appetite,
-      serviceTime: feedbackForm.serviceTime,
-      userId: "e95d141e-3415-420b-a565-9a7aaa232d73",
+    Axios.post(
+      "https://cors-everywhere.herokuapp.com/http://103.116.105.48/api/performance/feedback",
+      {
+        email: feedbackForm.email,
+        overall: feedbackForm.overall,
+        staff: feedbackForm.staff,
+        cleanliness: feedbackForm.cleanliness,
+        facilities: feedbackForm.facilities,
+        valueForMoney: feedbackForm.valueForMoney,
+        appetite: feedbackForm.appetite,
+        serviceTime: feedbackForm.serviceTime,
+        userId: id.id,
+      }
+    ).then((res) => {
+      if (res.status === 201) {
+        setFeedbackForm({
+          email: "",
+          overall: 0,
+          staff: 0,
+          cleanliness: 0,
+          facilities: 0,
+          valueForMoney: 0,
+          appetite: 0,
+          serviceTime: 0,
+        });
+
+        toast.success("Thank You!", { autoClose: 1000 });
+      } else {
+        toast.error("Sorry! Please Try Again.", { autoClose: 1000 });
+      }
     });
   }
+
   function handleChange(e) {
     const newdata = { ...feedbackForm };
     if (e.target.name === "email") {
