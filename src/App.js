@@ -6,7 +6,6 @@ import logo from "./logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "./App.css";
 import Axios from "axios";
-toast.configure();
 
 function App() {
   const [feedbackForm, setFeedbackForm] = useState({
